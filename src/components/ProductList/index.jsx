@@ -1,8 +1,10 @@
 import Image from 'next/image';
-import { ProductsWrapper, Card, TitlePrice, BuyButton } from './styles';
+import { ProductsWrapper, Card, TitlePrice, BuyButton, Loading } from './styles';
 import buy from '../../../public/buy.svg';
 import { useState, useEffect } from 'react';
 import Cart from '../Cart';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export default function ProductList() {
 
@@ -32,17 +34,30 @@ export default function ProductList() {
   }
 
 
-  const addProductToCart = (id) => {
+  const addProductToCart = ({ id, title, price }) => {
     const copyProductsCart = [...productsCart];
 
     const item = copyProductsCart.find((product) => product.id == id)
 
     if(!item) {
-      copyProductsCart.push({id: id, qtd: 1})
-    }else {
+      /**
+       * {
+       *  title: 'Apple Watch Series 4 GPS',
+       *  qtd: 1,
+       *  price: 399.00,
+       * }
+      */
+      copyProductsCart.push({
+        id,
+        title,
+        price,
+        qtd: 1,
+      })
+    } else {
       item.qtd = item.qtd + 1;
     }
 
+    setCart(!cart)
     setProductsCart(copyProductsCart)
   }
 
@@ -60,10 +75,10 @@ export default function ProductList() {
     }
   }
 
-  const showCart = () => {
-    setCart(!cart)
-    addProductToCart()
-  };
+  // const showCart = () => {
+  //   setCart(!cart)
+  //   addProductToCart()
+  // };
 
   const clearCart = () => {
     setProductsCart([]);
@@ -79,14 +94,10 @@ export default function ProductList() {
     };
   }, [data])
 
-  useEffect(() => {
-    addProductToCart();
-  }, [])
-
   return (
     <ProductsWrapper>
       {loading && !data && 
-      <p>Carregando informações</p>
+      <Skeleton />
       }
       {products && products.map((item) => (
       <Card key={item.id}>
@@ -98,7 +109,7 @@ export default function ProductList() {
           <h3>R${item.price}</h3>
         </TitlePrice>
           <p>Redesigned from scratch and completely revised.</p>
-        <BuyButton onClick={showCart}><Image src={buy} alt={'buy button'}/>COMPRAR</BuyButton>
+        <BuyButton onClick={(props) => addProductToCart(props)}><Image src={buy} alt={'buy button'}/>COMPRAR</BuyButton>
       </Card>
       ))}
       {cart && <Cart active={setCart} />}

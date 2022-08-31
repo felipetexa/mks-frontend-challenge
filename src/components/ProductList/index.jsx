@@ -36,23 +36,18 @@ export default function ProductList() {
 
   const addProductToCart = ({ id, title, price }) => {
     const copyProductsCart = [...productsCart];
+    console.log('add productsCart', productsCart);
 
     const item = copyProductsCart.find((product) => product.id == id)
 
     if(!item) {
-      /**
-       * {
-       *  title: 'Apple Watch Series 4 GPS',
-       *  qtd: 1,
-       *  price: 399.00,
-       * }
-      */
       copyProductsCart.push({
         id,
         title,
         price,
         qtd: 1,
       })
+      console.log('copy productsCart', copyProductsCart)
     } else {
       item.qtd = item.qtd + 1;
     }
@@ -61,19 +56,19 @@ export default function ProductList() {
     setProductsCart(copyProductsCart)
   }
 
-  const removeProductFromCart = (id) => {
-    const copyProductsCart = [...productsCart];
+  // const removeProductFromCart = (id) => {
+  //   const copyProductsCart = [...productsCart];
 
-    const item = copyProductsCart.find((product) => product.id == id)
+  //   const item = copyProductsCart.find((product) => product.id == id)
 
-    if(item && item.qtd > 1) {
-      item.qtd = item.qtd - 1;
-      setProductsCart(copyProductsCart);
-    }else{
-      const arrayFiltered = copyProductsCart.filter(product => product.id !== id)
-      setProductsCart(arrayFiltered)
-    }
-  }
+  //   if(item && item.qtd > 1) {
+  //     item.qtd = item.qtd - 1;
+  //     setProductsCart(copyProductsCart);
+  //   }else{
+  //     const arrayFiltered = copyProductsCart.filter(product => product.id !== id)
+  //     setProductsCart(arrayFiltered)
+  //   }
+  // }
 
   // const showCart = () => {
   //   setCart(!cart)
@@ -83,6 +78,11 @@ export default function ProductList() {
   const clearCart = () => {
     setProductsCart([]);
   }
+
+  const buyClick = (props) => {
+    console.log('buyClick', props)
+    addProductToCart(props)
+  };
 
   useEffect(() => {
     fetchAllData();
@@ -109,10 +109,10 @@ export default function ProductList() {
           <h3>R${item.price}</h3>
         </TitlePrice>
           <p>Redesigned from scratch and completely revised.</p>
-        <BuyButton onClick={(props) => addProductToCart(props)}><Image src={buy} alt={'buy button'}/>COMPRAR</BuyButton>
+        <BuyButton onClick={buyClick}><Image src={buy} alt={'buy button'}/>COMPRAR</BuyButton>
       </Card>
       ))}
-      {cart && <Cart active={setCart} />}
+      {cart && <Cart items={productsCart} active={setCart} />}
     </ProductsWrapper>
   )
 }

@@ -3,10 +3,8 @@ import Image from 'next/image';
 import { CartWrapper, CartHeader, CartCard, QtdCounter, DeleteButton, TotalPrice, PlaceOrder } from './styles';
 import { useState } from 'react';
 
-export default function Cart({active}) {
-
+export default function Cart({active, items}) {
   const [count, setCount] = useState(1)
-  const [items, setItems] = useState([]);
 
   const closeCart = () => {
     active(false)
@@ -21,7 +19,7 @@ export default function Cart({active}) {
 <path d="M26.42 26L20.54 18.44L26.084 11.272H23.9L19.476 17.04L15.052 11.272H12.812L18.356 18.44L12.532 26H14.772L19.476 19.84L24.152 26H26.42Z" fill="white"/>
         </svg></button>
       </CartHeader>
-      {items.map(item => {
+      {items && items.map(item => {
       <CartCard>
          <Image width='46px' height='57px' src={item.photo} alt={'teste'}/>
          <h2>{item.title}</h2>

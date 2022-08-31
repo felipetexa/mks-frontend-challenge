@@ -65,9 +65,11 @@ export const BuyButton = styled.button`
     background: #0F52BA;
     color: #ffffff;
     font-size: 1.4rem;
+    font-family: 'Montserrat', sans-serif;
     cursor: pointer;
     border-radius: 0 0 .8rem .8rem;
     text-align: center;
     -webkit-appearance: none;
     -moz-appearance: none;
 `
+
